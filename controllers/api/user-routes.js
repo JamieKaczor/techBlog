@@ -6,19 +6,18 @@ const bcrypt = require('bcrypt');
 router.post('/', async (req, res) => {
   try {
     const newUser = await User.create(req.body);
+    // SET USERNAME TO USERNAME SENT IN REQUEST
+    username: req.body.username
+    // SET PASSWORD TO PASSWORD SENT IN REQUEST
+    password: req.body.password
     
-      // TODO: SET USERNAME TO USERNAME SENT IN REQUEST
-
-      // TOD: SET PASSWORD TO PASSWORD SENT IN REQUEST
-    
-
     req.session.save(() => {
-      // TODO: SET USERID userID IN REQUEST SESSION TO ID RETURNED FROM DATABASE
+      // SET USERID userID IN REQUEST SESSION TO ID RETURNED FROM DATABASE
+      req.session.storeNewUser = newUser.id;
+      // SET USERNAME username IN REQUEST SESSION TO USERNAME RETURNED FROM DATABASE
 
-      // TODO: SET USERNAME username IN REQUEST SESSION TO USERNAME RETURNED FROM DATABASE
-
-      // TODO: SET LOGGEDIN loggedIn TO TRUE IN REQUEST SESSION
-
+      // SET LOGGEDIN loggedIn TO TRUE IN REQUEST SESSION
+      req.session.loggedIn = true;
       res.json(newUser);
     });
   } catch (err) {
@@ -49,13 +48,12 @@ router.post('/login', async (req, res) => {
     }
 
     req.session.save(() => {
-      req.session.user_id = user.id;
-      req.session.logged_in = true;
-      // TODO: SET USERID IN REQUEST SESSION TO ID RETURNED FROM DATABASE
-
-      // TODO: SET USERNAME IN REQUEST SESSION TO USERNAME RETURNED FROM DATABASE
-
-      // TODO: SET LOGGEDIN TO TRUE IN REQUEST SESSION
+      // SET USERID IN REQUEST SESSION TO ID RETURNED FROM DATABASE
+      req.session.userId = user.id;
+      // SET USERNAME IN REQUEST SESSION TO USERNAME RETURNED FROM DATABASE
+      req.session.userName = user.userName
+      // SET LOGGEDIN TO TRUE IN REQUEST SESSION
+      req.session.loggedIn = true;
 
       res.json({ user, message: 'You are now logged in!' });
     });
