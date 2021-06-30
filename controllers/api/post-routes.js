@@ -39,8 +39,10 @@ router.delete('/:id', withAuth, async (req, res) => {
   try {
     const [affectedRows] = Post.destroy({
       // SET ID TO ID PARAMETER INSIDE WHERE CLAUSE CONDITION FIELD
-      id: req.session.id
-
+      where: {
+        id: req.params.id,
+        userId: req.session.userId
+      },
     });
 
     if (affectedRows > 0) {
