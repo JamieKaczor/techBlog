@@ -1,4 +1,5 @@
 const router = require('express').Router();
+// const { where } = require('sequelize/types');
 const { Post } = require('../../models/');
 const withAuth = require('../../utils/auth');
 
@@ -6,12 +7,12 @@ router.post('/', withAuth, async (req, res) => {
   const body = req.body;
 
   try {
-    const newPost = await Post.create({
-      // POST BODY SENT IN REQUEST. HINT USING SPREAD
-      ...req.body,
-      // SET USERID TO LOGGEDIN USERID
-      loggedIn: req.session.userId
-    });
+    const newPost = await Post.create(  // CHECK REQ.res CORRECT!!!
+      // TODO: POST BODY SENT IN REQUEST. HINT USING SPREAD
+    {...body, 
+      // TODO: SET USERID TO LOGGEDIN USERID
+      loginId: req.session.userId,
+    })
     res.json(newPost);
   } catch (err) {
     res.status(500).json(err);
@@ -21,8 +22,8 @@ router.post('/', withAuth, async (req, res) => {
 router.put('/:id', withAuth, async (req, res) => {
   try {
     const [affectedRows] = await Post.update(req.body, {
-      // SET ID TO ID PARAMETER INSIDE WHERE CLAUSE CONDITION FIELD
-      id: req.session.id
+      // TODO: SET ID TO ID PARAMETER INSIDE WHERE CLAUSE CONDITION FIELD
+      id: req.session.id,
     });
 
     if (affectedRows > 0) {
@@ -37,12 +38,9 @@ router.put('/:id', withAuth, async (req, res) => {
 
 router.delete('/:id', withAuth, async (req, res) => {
   try {
-    const [affectedRows] = Post.destroy({
-      // SET ID TO ID PARAMETER INSIDE WHERE CLAUSE CONDITION FIELD
-      where: {
-        id: req.params.id,
-        userId: req.session.userId
-      },
+    const [affectedRows] = await Post.destroy(req.body, {  // check if await and req.body correct
+      // TODO: SET ID TO ID PARAMETER INSIDE WHERE CLAUSE CONDITION FIELD
+      id: req.session.id,
     });
 
     if (affectedRows > 0) {

@@ -7,9 +7,9 @@ router.post('/', async (req, res) => {
   try {
     const newUser = await User.create(req.body);
     // SET USERNAME TO USERNAME SENT IN REQUEST
-    username: req.body.username
+    req.body.username
     // SET PASSWORD TO PASSWORD SENT IN REQUEST
-    password: req.body.password
+    req.body.password
     
     req.session.save(() => {
       // SET USERID userID IN REQUEST SESSION TO ID RETURNED FROM DATABASE
@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
       res.json(newUser);
     });
   } catch (err) {
-    res.status(500).json(err);
+    res.status(400).json(err);
   }
 });
 
