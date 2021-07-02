@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
     
     req.session.save(() => {
       // SET USERID userID IN REQUEST SESSION TO ID RETURNED FROM DATABASE
-      req.session.storeNewUser = newUser.id;
+      req.session.newUser = newUser.id;
       // SET USERNAME username IN REQUEST SESSION TO USERNAME RETURNED FROM DATABASE
 
       // SET LOGGEDIN loggedIn TO TRUE IN REQUEST SESSION
@@ -40,7 +40,7 @@ router.post('/login', async (req, res) => {
       return;
     }
 
-    const validPassword = user.checkPassword(req.body.password);
+    const validPassword = await user.checkPassword(req.body.password);
 
     if (!validPassword) {
       res.status(400).json({ message: 'No user account found!' });
